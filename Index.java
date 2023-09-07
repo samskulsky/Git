@@ -6,6 +6,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class Index {
+    public static void main(String[] args) throws IOException {
+        removeBlob("test.txt");
+    }
 
     public static void init() throws IOException {
         File in = new File("index");
@@ -30,11 +33,14 @@ public class Index {
         Blob blob = new Blob(filePath);
         File file = new File(filePath);
 
-        FileWriter fw = new FileWriter("index");
+        FileWriter fw = new FileWriter("index", true);
         PrintWriter pw = new PrintWriter(fw);
 
         if (!readFile("index").contains(blob.getSha1())) {
-            pw.println(file.getName() + " : " + blob.getSha1());
+            if (readFile("index").isEmpty())
+                pw.print(file.getName() + " : " + blob.getSha1());
+            else
+                pw.print("\n" + file.getName() + " : " + blob.getSha1());
         }
 
         pw.close();
