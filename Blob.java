@@ -8,14 +8,22 @@ import java.security.NoSuchAlgorithmException;
 
 public class Blob {
 
+    private String s1;
+
     public Blob(String path) throws IOException {
         String fileData = readFile(path);
 
         String sha1 = toSha1(fileData);
 
+        s1 = sha1;
+
         FileWriter fw = new FileWriter("objects/" + sha1, false);
         fw.write(fileData);
         fw.close();
+    }
+
+    public String getSha1() {
+        return s1;
     }
 
     public String readFile(String from) throws IOException {
