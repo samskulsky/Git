@@ -40,4 +40,21 @@ public class Index {
         pw.close();
         fw.close();
     }
+
+    public static void removeBlob(String filePath) throws IOException {
+        File file = new File(filePath);
+        removeLine(file.getName());
+    }
+
+    public static void removeLine(String lineContent) throws IOException {
+        File file = new File("index");
+        File temp = new File("_temp_");
+        PrintWriter out = new PrintWriter(new FileWriter(temp));
+        Files.lines(file.toPath())
+                .filter(line -> !line.contains(lineContent))
+                .forEach(out::println);
+        out.flush();
+        out.close();
+        temp.renameTo(file);
+    }
 }
