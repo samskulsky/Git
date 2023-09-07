@@ -1,8 +1,6 @@
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -11,7 +9,7 @@ public class Blob {
     private String s1;
 
     public Blob(String path) throws IOException {
-        String fileData = readFile(path);
+        String fileData = Index.readFile(path);
 
         String sha1 = toSha1(fileData);
 
@@ -24,10 +22,6 @@ public class Blob {
 
     public String getSha1() {
         return s1;
-    }
-
-    public String readFile(String from) throws IOException {
-        return Files.readString(Path.of(from));
     }
 
     public String toSha1(String input) {
