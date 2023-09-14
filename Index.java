@@ -10,7 +10,10 @@ import java.nio.file.Path;
 
 public class Index {
     public static void main(String[] args) throws IOException {
-        removeBlob("index");
+        Index project = new Index();
+        addBlob ("test.txt");
+        System.out.println (project.readFile ("test.txt"));
+        
     }
 
     public static void init() throws IOException {
