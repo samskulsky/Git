@@ -1,13 +1,16 @@
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class Index {
     public static void main(String[] args) throws IOException {
-        removeBlob("test.txt");
+        removeBlob("index");
     }
 
     public static void init() throws IOException {
@@ -23,8 +26,23 @@ public class Index {
         }
     }
 
-    public static String readFile(String from) throws IOException {
-        return Files.readString(Path.of(from));
+    public static String readFile (String inputFile) throws IOException
+    {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+
+        try (FileInputStream files = new FileInputStream (inputFile))
+        {
+            byte [] br = new byte [1024];
+            int bytesRead;
+            while ((bytesRead = files.read(br)) != -1)
+            {
+                bytes.write (br, 0, bytesRead);
+            }
+        }
+        byte[] data =  bytes.toByteArray();
+         
+        String fileContents = new String (data, StandardCharsets.UTF_8);
+        return fileContents;
     }
 
     public static void addBlob(String filePath) throws IOException {

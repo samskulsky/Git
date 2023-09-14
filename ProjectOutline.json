@@ -1,0 +1,79 @@
+[
+    {
+        "className": "Blob",
+        "constructorConfigs": [
+            {
+                "parameterTypes": [
+                    "String"
+                ],
+                "values": [
+                    "test.txt"
+                ]
+            }
+        ],
+        "methodConfigs": [
+            {
+                "methodName": "",
+                "parameters": [],
+                "values": []
+            },
+            {
+                "methodName": "add",
+                "parameters": [
+                    "String"
+                ],
+                "values": [
+                    "__TEST_FILE_NAME__"
+                ]
+            }
+        ]
+    },
+    {
+        "className": "Index",
+        "constructorConfigs": [
+            {
+                "parameterTypes": [
+                    "String"
+                ],
+                "values": [
+                    ""
+                ]
+            }
+        ],
+        "methodConfigs": [
+            {
+                "methodName": "readFile",
+                "parameters": [
+                    "String"
+                ],
+                "values": [
+                    "index"
+                ]
+            }
+        ],
+        "methodConfigs": [
+            {
+                "methodName": "addBlob",
+                "parameters": [
+                    "String"
+                ],
+                "values": [
+                    "filePath",
+                    "test.txt"
+                ]
+            }
+        ],
+        "methodConfigs": [
+            {
+                "methodName": "removeBlob",
+                "parameters": [
+                    "String"
+                ],
+                "values": [
+                    "filePath",
+                    "test.txt"
+                ]
+            }
+        ]
+    }
+]
