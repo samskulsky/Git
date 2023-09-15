@@ -13,20 +13,25 @@
         ],
         "methodConfigs": [
             {
-                "methodName": "",
-                "parameters": [],
-                "values": []
+                "methodName": "getSha1",
+                "parameters": [
+
+                ],
+                "values": [
+                    "s1"
+                ]
             },
             {
-                "methodName": "add",
+                "methodName": "toSha1",
                 "parameters": [
                     "String"
                 ],
                 "values": [
-                    "__TEST_FILE_NAME__"
+                    "input"
                 ]
             }
         ]
+
     },
     {
         "className": "Index",
@@ -38,9 +43,8 @@
                 "values": [
                     ""
                 ]
-            }
-        ],
-        "methodConfigs": [
+            },
+        
             {
                 "methodName": "readFile",
                 "parameters": [
@@ -49,9 +53,8 @@
                 "values": [
                     "index"
                 ]
-            }
-        ],
-        "methodConfigs": [
+            },
+        
             {
                 "methodName": "addBlob",
                 "parameters": [
@@ -61,9 +64,7 @@
                     "filePath",
                     "test.txt"
                 ]
-            }
-        ],
-        "methodConfigs": [
+            },
             {
                 "methodName": "removeBlob",
                 "parameters": [
@@ -72,6 +73,15 @@
                 "values": [
                     "filePath",
                     "test.txt"
+                ]
+            },
+            {
+                "methodName": "init",
+                "parameters": [
+                    ""
+                ],
+                "values": [
+                    
                 ]
             }
         ]

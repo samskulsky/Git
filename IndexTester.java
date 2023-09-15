@@ -1,5 +1,8 @@
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -86,6 +89,26 @@ public class IndexTester {
         String indexContents = readFileContent("index");
         assertTrue(indexContents.contains(testFinalPath));
     }
+    @Test
+    public void testRemoveBlob() throws IOException
+    {
+        Index.init();
+        
+        
+        Index.addBlob(testFinalPath);
+
+
+        Index.removeBlob(testFinalPath);
+        try
+        {
+            String objectFilePath = "objects/" + getSha1(Index.readFile(testFinalPath));
+            assertFalse(fileIsNotEmpty(objectFilePath));
+        }
+        catch (NoSuchAlgorithmException e)
+        {
+            e.printStackTrace();
+        }
+    }
 
     
     private boolean folderExists(String directoryPath) {
@@ -119,4 +142,11 @@ public class IndexTester {
         }
         return hashtext;
     }
+    private boolean fileIsNotEmpty(String filePath) {
+        java.io.File file = new java.io.File(filePath);
+        return file.exists() && file.length() > 0;
+    }
+    
+
+   
 }

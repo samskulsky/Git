@@ -23,6 +23,7 @@ public class Tree
         tree.addTreeEntry("blob", sha2, "test.txt");
         System.out.println (treeList.get(0));
         System.out.println (treeList.get(1));
+        tree.removeTreeEntry("test.txt");
         tree.writeDataFile();
 
 

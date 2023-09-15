@@ -6,13 +6,14 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 
 public class Index {
     public static void main(String[] args) throws IOException {
         Index project = new Index();
         addBlob ("test.txt");
-        System.out.println (project.readFile ("test.txt"));
+        addBlob ("testfile.txt");
+        removeBlob ("test.txt");
+        removeBlob ("testfile.txt");
         
     }
 
