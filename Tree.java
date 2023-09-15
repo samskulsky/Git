@@ -3,7 +3,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
-import java.io.File;
 
 public class Tree 
 {
@@ -24,7 +23,7 @@ public class Tree
         tree.addTreeEntry("blob", sha2, "test.txt");
         System.out.println (treeList.get(0));
         System.out.println (treeList.get(1));
-        tree.writeDataFile("treeData");
+        tree.writeDataFile();
 
 
 
@@ -100,21 +99,29 @@ public class Tree
         }
     }
 
-    public void writeDataFile (String outputFile)
-    {
-        File file = new File (outputFile);
-        try (BufferedWriter bw = new BufferedWriter (new FileWriter (file)))
-        {
-            for (int i = 0; i < treeList.size(); i++)
-            {
-                bw.write (treeList.get(i));
-                bw.newLine();
+    public void writeDataFile() {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(generateFileName()))) {
+            for (String entry : treeList) {
+                bw.write(entry);
+                bw.newLine(); 
             }
-            bw.close();
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private String generateFileName() {
+        
+        StringBuilder data = new StringBuilder();
+        for (String entry : treeList) {
+            data.append(entry);
+            data.append("\n"); 
+        }
+
+       
+        String sha1 = Blob.toSha1(data.toString());
+
+        
+        return "objects/" + sha1;
     }
 }
