@@ -24,7 +24,7 @@ public class Blob {
         return s1;
     }
 
-    public String toSha1(String input) {
+    public static String toSha1(String input) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-1");
 

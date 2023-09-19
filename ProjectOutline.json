@@ -1,0 +1,89 @@
+[
+    {
+        "className": "Blob",
+        "constructorConfigs": [
+            {
+                "parameterTypes": [
+                    "String"
+                ],
+                "values": [
+                    "test.txt"
+                ]
+            }
+        ],
+        "methodConfigs": [
+            {
+                "methodName": "getSha1",
+                "parameters": [
+
+                ],
+                "values": [
+                    "s1"
+                ]
+            },
+            {
+                "methodName": "toSha1",
+                "parameters": [
+                    "String"
+                ],
+                "values": [
+                    "input"
+                ]
+            }
+        ]
+
+    },
+    {
+        "className": "Index",
+        "constructorConfigs": [
+            {
+                "parameterTypes": [
+                    "String"
+                ],
+                "values": [
+                    ""
+                ]
+            },
+        
+            {
+                "methodName": "readFile",
+                "parameters": [
+                    "String"
+                ],
+                "values": [
+                    "index"
+                ]
+            },
+        
+            {
+                "methodName": "addBlob",
+                "parameters": [
+                    "String"
+                ],
+                "values": [
+                    "filePath",
+                    "test.txt"
+                ]
+            },
+            {
+                "methodName": "removeBlob",
+                "parameters": [
+                    "String"
+                ],
+                "values": [
+                    "filePath",
+                    "test.txt"
+                ]
+            },
+            {
+                "methodName": "init",
+                "parameters": [
+                    ""
+                ],
+                "values": [
+                    
+                ]
+            }
+        ]
+    }
+]
