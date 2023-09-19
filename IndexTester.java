@@ -66,13 +66,13 @@ public class IndexTester {
 public void testRemoveBlob() throws IOException {
     Index.init();
 
-    // Add a blob to the index
+    
     Index.addBlob(testFinalPath);
 
-    // Remove the blob
+    
     Index.removeBlob(testFinalPath);
 
-    // Check that the blob is removed from the "objects" directory
+    
     String sha1 = null;
     try {
         sha1 = getSha1(Index.readFile(testFinalPath));
@@ -81,7 +81,7 @@ public void testRemoveBlob() throws IOException {
     }
 
     String objectFilePath = "objects/" + sha1;
-    // Check that the blob entry is removed from the "index" file
+    
     String indexContents = readFileContent("index");
     assertFalse(indexContents.contains(testFinalPath + " : " + sha1), "Index entry should not exist");
 }
