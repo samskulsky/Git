@@ -24,6 +24,7 @@ public class Tree
         System.out.println (treeList.get(0));
         System.out.println (treeList.get(1));
         tree.removeTreeEntry("test.txt");
+        tree.removeBlobEntry("test.txt");
         tree.writeDataFile();
 
 
@@ -111,7 +112,7 @@ public class Tree
         }
     }
 
-    private String generateFileName() {
+    public String generateFileName() {
         
         StringBuilder data = new StringBuilder();
         for (String entry : treeList) {
@@ -124,5 +125,9 @@ public class Tree
 
         
         return "objects/" + sha1;
+    }
+    public ArrayList<String> getTreeList()
+    {
+        return treeList;
     }
 }

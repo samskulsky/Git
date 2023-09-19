@@ -9,7 +9,7 @@ import java.nio.file.Files;
 
 public class Index {
     public static void main(String[] args) throws IOException {
-        Index project = new Index();
+        init();
         addBlob ("test.txt");
         addBlob ("testfile.txt");
         removeBlob ("test.txt");

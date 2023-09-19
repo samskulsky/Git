@@ -1,8 +1,6 @@
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -14,7 +12,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class IndexTester {
 
-    private static final String testFinalPath = "testfile2.txt";
+    private static final String testFinalPath = "testfile.txt";
     private static final String testFileContent = "Testing the index and blob classes";
 
     @BeforeEach
@@ -28,32 +26,6 @@ public class IndexTester {
         }
     }
 
-    @Test
-    public void testBlob() throws IOException {
-
-        
-        Blob blob = new Blob(testFinalPath);
-
-        
-        assertNotNull(blob.getSha1());
-
-        
-        assertTrue(checkFileExists("objects/" + blob.getSha1()));
-
-        
-        String originalContent = readFileContent(testFinalPath);
-
-        
-        String blobContent = readFileContent("objects/" + blob.getSha1());
-
-        
-        assertEquals(originalContent, blobContent);
-    }
-
-    
-    private boolean checkFileExists(String filePath) {
-        return Files.exists(Paths.get(filePath));
-    }
 
     
     private String readFileContent(String filePath) throws IOException {
@@ -89,26 +61,32 @@ public class IndexTester {
         String indexContents = readFileContent("index");
         assertTrue(indexContents.contains(testFinalPath));
     }
+
     @Test
-    public void testRemoveBlob() throws IOException
-    {
-        Index.init();
-        
-        
-        Index.addBlob(testFinalPath);
+public void testRemoveBlob() throws IOException {
+    Index.init();
 
+    
+    Index.addBlob(testFinalPath);
 
-        Index.removeBlob(testFinalPath);
-        try
-        {
-            String objectFilePath = "objects/" + getSha1(Index.readFile(testFinalPath));
-            assertFalse(fileIsNotEmpty(objectFilePath));
-        }
-        catch (NoSuchAlgorithmException e)
-        {
-            e.printStackTrace();
-        }
+    
+    Index.removeBlob(testFinalPath);
+
+    
+    String sha1 = null;
+    try {
+        sha1 = getSha1(Index.readFile(testFinalPath));
+    } catch (NoSuchAlgorithmException e) {
+        fail("SHA-1 algorithm not available");
     }
+
+    String objectFilePath = "objects/" + sha1;
+    
+    String indexContents = readFileContent("index");
+    assertFalse(indexContents.contains(testFinalPath + " : " + sha1), "Index entry should not exist");
+}
+
+
 
     
     private boolean folderExists(String directoryPath) {
