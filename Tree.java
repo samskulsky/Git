@@ -130,4 +130,15 @@ public class Tree
     {
         return treeList;
     }
+
+    public String getSha1 ()
+    {
+        StringBuilder data = new StringBuilder();
+        for (String entry : treeList) {
+            data.append(entry);
+            data.append("\n"); 
+        }
+        String sha1 = Blob.toSha1(data.toString());
+        return sha1;
+    }
 }
