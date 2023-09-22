@@ -18,7 +18,7 @@ public class CommitTest {
         assertEquals("Test if generateSha1 works", "ce869b9783cf4756664a7c5a547215bb97404669", sha1);
     }
 
-    @Test
+    @Test //Test if writeToFile correctly writes
     public void testWriteToFile() throws NoSuchAlgorithmException, IOException {
         Commit commit = new Commit("parentSha1", "Author", "Summary");
         String expectedSha1 = commit.generateSha1(); // Expected SHA1 hash based on commit data
@@ -44,7 +44,7 @@ public class CommitTest {
             expectedCommitData.append(commit.getDate() + "\n");
             expectedCommitData.append(commit.getSummary() + "\n");
 
-            assertEquals(expectedCommitData.toString(), fileContent.toString());
+            assertEquals("Test if writeToFile works", expectedCommitData.toString(), fileContent.toString());
         }
 
     }
