@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 
 public class Tree {
@@ -120,21 +121,27 @@ public class Tree {
         return sha1;
     }
 
-    public String addDirectory(String directoryPath) throws IOException {
-        String[] files = listFiles(directoryPath).toArray(new String[0]);
+    public String addDirectory(String directoryPath) throws Exception {
+        try {
+            String[] files = listFiles(directoryPath).toArray(new String[0]);
 
-        for (String file : files) {
-            addTreeEntry("blob", Blob.toSha1(Index.readFile(file)), file);
+            String[] folders = listFolders(directoryPath).toArray(new String[0]);
+
+            for (String file : files) {
+                addTreeEntry("blob", Blob.toSha1(Index.readFile(file)), file);
+            }
+
+            for (String file : folders) {
+                Tree childTree = new Tree();
+                childTree.addDirectory(file);
+                childTree.writeDataFile();
+                addTreeEntry("tree", childTree.getSha1(), file);
+            }
+        } catch (IOException exception) {
+            throw new Exception("File not readable");
         }
 
-        String[] folders = listFolders(directoryPath).toArray(new String[0]);
-
-        for (String file : folders) {
-            Tree childTree = new Tree();
-            childTree.addDirectory(file);
-            childTree.writeDataFile();
-            addTreeEntry("tree", childTree.getSha1(), file);
-        }
+        writeDataFile();
     }
 
     public Set<String> listFiles(String dir) {
