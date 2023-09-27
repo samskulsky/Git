@@ -14,7 +14,7 @@ public class Tree {
     private HashSet<String> fileNameList;
     private HashSet<String> sha1List;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         Tree tree = new Tree();
         try (BufferedWriter bw = new BufferedWriter(new FileWriter("testfile.txt"))) {
             Blob blob = new Blob("testfile.txt");
@@ -28,6 +28,21 @@ public class Tree {
             tree.removeTreeEntry("test.txt");
             tree.removeBlobEntry("test.txt");
             tree.writeDataFile();
+
+            new File("test1").mkdirs();
+            FileWriter fw = new FileWriter("test1/examplefile1.txt");
+            fw.write("stuff");
+            fw.close();
+
+            FileWriter fw2 = new FileWriter("test1/examplefile2.txt");
+            fw2.write("random things");
+            fw2.close();
+
+            FileWriter fw3 = new FileWriter("test1/examplefile3.txt");
+            fw3.write("other stuff");
+            fw3.close();
+            Tree tree4 = new Tree();
+            tree4.addDirectory("test1");
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -142,19 +157,20 @@ public class Tree {
         }
 
         writeDataFile();
+        return getSha1();
     }
 
     public Set<String> listFiles(String dir) {
         return Stream.of(new File(dir).listFiles())
                 .filter(file -> !file.isDirectory())
-                .map(File::getName)
+                .map(File::getPath)
                 .collect(Collectors.toSet());
     }
 
     public Set<String> listFolders(String dir) {
         return Stream.of(new File(dir).listFiles())
                 .filter(file -> file.isDirectory())
-                .map(File::getName)
+                .map(File::getPath)
                 .collect(Collectors.toSet());
     }
 
