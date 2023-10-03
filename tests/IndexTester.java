@@ -1,5 +1,9 @@
+package tests;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import src.Git.Index;
 
 import java.io.FileWriter;
 import java.io.IOException;

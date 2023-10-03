@@ -13,6 +13,9 @@ import java.security.NoSuchAlgorithmException;
 
 import org.junit.jupiter.api.Test;
 
+import src.Git.Blob;
+import src.Git.Tree;
+
 public class TreeTest {
     private String path = "testfile.txt";
 

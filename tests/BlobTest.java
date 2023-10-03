@@ -1,3 +1,5 @@
+package tests;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -10,25 +12,23 @@ import java.nio.file.Paths;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import src.Git.Blob;
+
 public class BlobTest {
     private static final String testFinalPath = "testfile2.txt";
     private static final String testFileContent = "Testing the index and blob classes";
 
-    //create festfile2.txt and testFileContent in a BeforeAll method
+    // create festfile2.txt and testFileContent in a BeforeAll method
     @BeforeAll
-    static public void createFile () throws IOException
-    {
-        FileWriter fw = new FileWriter (testFinalPath);
-        try
-        {
-            fw.write (testFileContent);
-        }
-        catch (IOException e)
-        {
+    static public void createFile() throws IOException {
+        FileWriter fw = new FileWriter(testFinalPath);
+        try {
+            fw.write(testFileContent);
+        } catch (IOException e) {
             e.printStackTrace();
         }
         fw.close();
-        
+
     }
 
     @Test

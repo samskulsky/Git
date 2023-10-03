@@ -1,3 +1,5 @@
+package src.Git;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,11 +12,11 @@ import java.nio.file.Files;
 public class Index {
     public static void main(String[] args) throws IOException {
         init();
-        addBlob ("test.txt");
-        addBlob ("testfile.txt");
-        removeBlob ("test.txt");
-        removeBlob ("testfile.txt");
-        
+        addBlob("test.txt");
+        addBlob("testfile.txt");
+        removeBlob("test.txt");
+        removeBlob("testfile.txt");
+
     }
 
     public static void init() throws IOException {
@@ -30,22 +32,19 @@ public class Index {
         }
     }
 
-    public static String readFile (String inputFile) throws IOException
-    {
+    public static String readFile(String inputFile) throws IOException {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 
-        try (FileInputStream files = new FileInputStream (inputFile))
-        {
-            byte [] br = new byte [1024];
+        try (FileInputStream files = new FileInputStream(inputFile)) {
+            byte[] br = new byte[1024];
             int bytesRead;
-            while ((bytesRead = files.read(br)) != -1)
-            {
-                bytes.write (br, 0, bytesRead);
+            while ((bytesRead = files.read(br)) != -1) {
+                bytes.write(br, 0, bytesRead);
             }
         }
-        byte[] data =  bytes.toByteArray();
-         
-        String fileContents = new String (data, StandardCharsets.UTF_8);
+        byte[] data = bytes.toByteArray();
+
+        String fileContents = new String(data, StandardCharsets.UTF_8);
         return fileContents;
     }
 
