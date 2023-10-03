@@ -1,3 +1,4 @@
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -6,7 +7,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.NoSuchAlgorithmException;
 
 import org.junit.jupiter.api.Test;
 
@@ -76,19 +79,19 @@ public class TreeTest {
     }
 
     @Test
-    void testAddDirectory() throws IOException {
-        new File("test1").mkdirs();
-        FileWriter fw = new FileWriter("test1/examplefile1.txt");
-        fw.write("stuff");
-        fw.close();
+    void testAddDirectory1() throws Exception {
+        File fold = new File("test1");
+        fold.mkdirs();
+        Tree tree = new Tree();
 
-        FileWriter fw2 = new FileWriter("test1/examplefile2.txt");
-        fw2.write("random things");
-        fw2.close();
+        for (int i = 0; i < 3; i++) {
+            FileWriter fw = new FileWriter(new File(fold.getPath() + "/" + i));
+            fw.write(i);
+            fw.close();
+        }
 
-        FileWriter fw3 = new FileWriter("test1/examplefile3.txt");
-        fw3.write("other stuff");
-        fw3.close();
-
+        tree.addDirectory("test1");
+        tree.writeDataFile();
+        assertNotNull(tree.getSha1());
     }
 }

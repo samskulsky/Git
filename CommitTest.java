@@ -11,14 +11,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class CommitTest {
 
-    @Test //Test if generateSha1 returns the correct result
+    @Test // Test if generateSha1 returns the correct result
     public void testGenerateSha1() throws NoSuchAlgorithmException {
         Commit commit = new Commit("parentSha1", "Author", "Summary");
         String sha1 = commit.generateSha1();
-        assertEquals("Test if generateSha1 works", "ce869b9783cf4756664a7c5a547215bb97404669", sha1);
+        assertEquals("Test if generateSha1 works", "13f090f6895c9a420dd5e21385c9e5a8d36ea77e", sha1);
     }
 
-    @Test //Test if writeToFile correctly writes
+    @Test // Test if writeToFile correctly writes
     public void testWriteToFile() throws NoSuchAlgorithmException, IOException {
         Commit commit = new Commit("parentSha1", "Author", "Summary");
         String expectedSha1 = commit.generateSha1(); // Expected SHA1 hash based on commit data

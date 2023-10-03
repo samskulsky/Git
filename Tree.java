@@ -98,6 +98,14 @@ public class Tree {
         }
     }
 
+    public String getDataString() {
+        StringBuilder sb = new StringBuilder();
+        for (String entry : treeList) {
+            sb.append(entry + "\n");
+        }
+        return sb.toString();
+    }
+
     public void writeDataFile() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(generateFileName()))) {
             for (String entry : treeList) {
