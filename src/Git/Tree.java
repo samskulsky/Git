@@ -16,42 +16,6 @@ public class Tree {
     private HashSet<String> fileNameList;
     private HashSet<String> sha1List;
 
-    public static void main(String[] args) throws Exception {
-        Tree tree = new Tree();
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter("testfile.txt"))) {
-            Blob blob = new Blob("testfile.txt");
-            String sha1 = blob.toSha1("testFile.txt");
-            tree.addTreeEntry("tree", sha1, "testfile.txt");
-            Blob blob2 = new Blob("test.txt");
-            String sha2 = blob2.toSha1("test.txt");
-            tree.addTreeEntry("blob", sha2, "test.txt");
-            System.out.println(treeList.get(0));
-            System.out.println(treeList.get(1));
-            tree.removeTreeEntry("test.txt");
-            tree.removeBlobEntry("test.txt");
-            tree.writeDataFile();
-
-            new File("test1").mkdirs();
-            FileWriter fw = new FileWriter("test1/examplefile1.txt");
-            fw.write("stuff");
-            fw.close();
-
-            FileWriter fw2 = new FileWriter("test1/examplefile2.txt");
-            fw2.write("random things");
-            fw2.close();
-
-            FileWriter fw3 = new FileWriter("test1/examplefile3.txt");
-            fw3.write("other stuff");
-            fw3.close();
-            Tree tree4 = new Tree();
-            tree4.addDirectory("test1");
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
     public Tree() {
         treeList = new ArrayList<String>();
         fileNameList = new HashSet<String>();
@@ -61,7 +25,12 @@ public class Tree {
     public void addTreeEntry(String fileType, String sha1, String fileName) {
         if (fileType.equals("tree")) {
             if (!treeList.contains(fileType + " : " + sha1)) {
-                treeList.add(fileType + " : " + sha1);
+                if (fileName.isEmpty()) {
+                    treeList.add(fileType + " : " + sha1);
+                } else {
+                    treeList.add(fileType + " : " + sha1 + " : " + fileName);
+                    fileNameList.add(fileName);
+                }
                 sha1List.add(sha1);
             }
 
@@ -70,6 +39,7 @@ public class Tree {
             if (!treeList.contains(fileType + " : " + sha1 + " : " + fileName)) {
                 treeList.add(fileType + " : " + sha1 + " : " + fileName);
                 fileNameList.add(fileName);
+                sha1List.add(sha1);
             }
         }
     }
@@ -155,11 +125,13 @@ public class Tree {
             String[] folders = listFolders(directoryPath).toArray(new String[0]);
 
             for (String file : files) {
+                System.out.println(file + " " + Blob.toSha1(Index.readFile(file)));
                 File f = new File(file);
                 addTreeEntry("blob", Blob.toSha1(Index.readFile(file)), f.getName());
             }
 
             for (String file : folders) {
+                System.out.println(file);
                 Tree childTree = new Tree();
                 childTree.addDirectory(file);
                 childTree.writeDataFile();
