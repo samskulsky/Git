@@ -92,7 +92,6 @@ public class Tree {
     }
 
     public String generateFileName() {
-
         StringBuilder data = new StringBuilder();
         for (String entry : treeList) {
             data.append(entry);
@@ -123,43 +122,26 @@ public class Tree {
         if (!dir.isDirectory()) {
             throw new Exception("Not a directory");
         }
+        File[] files = dir.listFiles();
 
-        String[] files = listFiles(directoryPath).toArray(new String[0]);
+        Tree tree = new Tree();
 
-        String[] folders = listFolders(directoryPath).toArray(new String[0]);
+        for (File file : files) {
+            System.out.println(directoryPath + " " + file.getName());
+            if (file.isDirectory()) {
+                Tree childTree = new Tree();
+                tree.addTreeEntry("tree", childTree.addDirectory(file.getPath()), file.getName());
+            } else {
+                Blob blob = new Blob(file.getPath());
+                System.out.println("BLOB " + file.getName());
 
-        Tree newTree = new Tree();
-
-        for (String file : files) {
-            File f = new File(file);
-            Blob blob = new Blob(file);
-            addTreeEntry("blob", blob.getSha1(), f.getName());
+                tree.addTreeEntry("blob", blob.getSha1(), file.getName());
+            }
         }
 
-        for (String file : folders) {
-            File f = new File(file);
-            Tree childTree = new Tree();
-            childTree.addDirectory(file);
-            childTree.writeDataFile();
-            addTreeEntry("tree", childTree.getSha1(), f.getName());
-        }
+        tree.writeDataFile();
 
-        writeDataFile();
-        return getSha1();
-    }
-
-    public Set<String> listFiles(String dir) {
-        return Stream.of(new File(dir).listFiles())
-                .filter(file -> !file.isDirectory())
-                .map(File::getPath)
-                .collect(Collectors.toSet());
-    }
-
-    public Set<String> listFolders(String dir) {
-        return Stream.of(new File(dir).listFiles())
-                .filter(file -> file.isDirectory())
-                .map(File::getPath)
-                .collect(Collectors.toSet());
+        return tree.getSha1();
     }
 
 }
