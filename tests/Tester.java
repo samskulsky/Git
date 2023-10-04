@@ -3,12 +3,11 @@ package tests;
 import java.io.IOException;
 
 import src.Git.Index;
+import src.Git.Tree;
 
 public class Tester {
-    public static void main(String[] args) throws IOException {
-        Index.addBlob("testfile.txt");
-        Index.addBlob("testfile1.txt");
-        Index.removeBlob("testfile.txt");
-        Index.addBlob("testfile2.txt");
+    public static void main(String[] args) throws Exception {
+        Tree tree = new Tree();
+        tree.addDirectory("testfolder");
     }
 }

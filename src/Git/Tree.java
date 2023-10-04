@@ -153,7 +153,8 @@ public class Tree {
             String[] folders = listFolders(directoryPath).toArray(new String[0]);
 
             for (String file : files) {
-                addTreeEntry("blob", Blob.toSha1(Index.readFile(file)), file);
+                File f = new File(file);
+                addTreeEntry("blob", Blob.toSha1(Index.readFile(file)), f.getName());
             }
 
             for (String file : folders) {
