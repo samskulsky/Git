@@ -9,6 +9,6 @@ public class Tester {
     public static void main(String[] args) throws Exception {
         Index.init();
         Tree tree = new Tree();
-        tree.addDirectory("testfolder");
+        System.out.println(tree.addDirectory("test1"));
     }
 }

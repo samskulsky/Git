@@ -119,26 +119,29 @@ public class Tree {
     }
 
     public String addDirectory(String directoryPath) throws Exception {
-        try {
-            String[] files = listFiles(directoryPath).toArray(new String[0]);
+        File dir = new File(directoryPath);
+        if (!dir.isDirectory()) {
+            throw new Exception("Not a directory");
+        }
 
-            String[] folders = listFolders(directoryPath).toArray(new String[0]);
+        String[] files = listFiles(directoryPath).toArray(new String[0]);
 
-            for (String file : files) {
-                System.out.println(file + " " + Blob.toSha1(Index.readFile(file)));
-                File f = new File(file);
-                addTreeEntry("blob", Blob.toSha1(Index.readFile(file)), f.getName());
-            }
+        String[] folders = listFolders(directoryPath).toArray(new String[0]);
 
-            for (String file : folders) {
-                System.out.println(file);
-                Tree childTree = new Tree();
-                childTree.addDirectory(file);
-                childTree.writeDataFile();
-                addTreeEntry("tree", childTree.getSha1(), file);
-            }
-        } catch (IOException exception) {
-            throw new Exception("File not readable");
+        Tree newTree = new Tree();
+
+        for (String file : files) {
+            File f = new File(file);
+            Blob blob = new Blob(file);
+            addTreeEntry("blob", blob.getSha1(), f.getName());
+        }
+
+        for (String file : folders) {
+            File f = new File(file);
+            Tree childTree = new Tree();
+            childTree.addDirectory(file);
+            childTree.writeDataFile();
+            addTreeEntry("tree", childTree.getSha1(), f.getName());
         }
 
         writeDataFile();
