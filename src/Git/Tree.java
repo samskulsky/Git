@@ -110,9 +110,11 @@ public class Tree {
 
     public void writeDataFile() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(generateFileName()))) {
-            for (String entry : treeList) {
-                bw.write(entry);
-                bw.newLine();
+            for (int i = 0; i < treeList.size(); i++) {
+                bw.write(treeList.get(i));
+                if (i < treeList.size() - 1) {
+                    bw.newLine();
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -142,8 +144,8 @@ public class Tree {
             data.append(entry);
             data.append("\n");
         }
-        String sha1 = Blob.toSha1(data.toString());
-        return sha1;
+        String sha1 = Blob.toSha1(data.toString().trim());
+        return sha1.trim();
     }
 
     public String addDirectory(String directoryPath) throws Exception {
