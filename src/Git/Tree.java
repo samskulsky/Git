@@ -127,14 +127,11 @@ public class Tree {
         Tree tree = new Tree();
 
         for (File file : files) {
-            System.out.println(directoryPath + " " + file.getName());
             if (file.isDirectory()) {
                 Tree childTree = new Tree();
                 tree.addTreeEntry("tree", childTree.addDirectory(file.getPath()), file.getName());
             } else {
                 Blob blob = new Blob(file.getPath());
-                System.out.println("BLOB " + file.getName());
-
                 tree.addTreeEntry("blob", blob.getSha1(), file.getName());
             }
         }
