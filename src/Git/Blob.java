@@ -7,7 +7,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class Blob {
-
     private String s1;
 
     public Blob(String path) throws IOException {

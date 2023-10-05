@@ -10,15 +10,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 public class Index {
-    public static void main(String[] args) throws IOException {
-        init();
-        addBlob("test.txt");
-        addBlob("testfile.txt");
-        removeBlob("test.txt");
-        removeBlob("testfile.txt");
-
-    }
-
     public static void init() throws IOException {
         File in = new File("index");
         File obj = new File("objects");

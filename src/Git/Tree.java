@@ -1,45 +1,32 @@
 package src.Git;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 
 public class Tree {
     private static ArrayList<String> treeList;
-    private HashSet<String> fileNameList;
-    private HashSet<String> sha1List;
 
     public Tree() {
         treeList = new ArrayList<String>();
-        fileNameList = new HashSet<String>();
-        sha1List = new HashSet<String>();
     }
 
     public void addTreeEntry(String fileType, String sha1, String fileName) {
         if (fileType.equals("tree")) {
             if (!treeList.contains(fileType + " : " + sha1)) {
-                if (fileName.isEmpty()) {
-                    treeList.add(fileType + " : " + sha1);
-                } else {
-                    treeList.add(fileType + " : " + sha1 + " : " + fileName);
-                    fileNameList.add(fileName);
-                }
-                sha1List.add(sha1);
-            }
+                treeList.add(fileType + " : " + sha1);
+            } else {
+                treeList.add(fileType + " : " + sha1 + " : " + fileName);
 
+            }
         }
+
         if (fileType.equals("blob")) {
             if (!treeList.contains(fileType + " : " + sha1 + " : " + fileName)) {
                 treeList.add(fileType + " : " + sha1 + " : " + fileName);
-                fileNameList.add(fileName);
-                sha1List.add(sha1);
+
             }
         }
     }
@@ -48,8 +35,7 @@ public class Tree {
         String tree = "";
         for (int i = 0; i < treeList.size(); i++) {
             if (treeList.get(i).contains(sha1)) {
-                String[] parts = treeList.get(i).split(" : ");
-                sha1List.remove(parts[1]);
+
                 tree = treeList.get(i);
                 treeList.remove(i);
             }
@@ -61,10 +47,7 @@ public class Tree {
     public void removeBlobEntry(String fileName) {
         for (int i = 0; i < treeList.size(); i++) {
             if (treeList.get(i).contains(fileName)) {
-                String[] parts = treeList.get(i).split(" : ");
-                if (parts.length == 3) {
-                    fileNameList.remove(parts[2]);
-                }
+
                 treeList.remove(i);
             }
         }
