@@ -6,6 +6,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Scanner;
 
 public class Commit {
     private String treeSha1;
@@ -21,6 +22,16 @@ public class Commit {
         this.author = author;
         this.date = new Date(); // Current date and time
         this.summary = summary;
+    }
+
+    public static String getCommitTreeSha1(String commitSha1) throws IOException {
+        FileReader fr = new FileReader("objects/" + commitSha1);
+        Scanner scan = new Scanner(fr);
+        String sha = scan.next();
+        scan.close();
+        fr.close();
+
+        return sha;
     }
 
     public String getTreeSha1() {
