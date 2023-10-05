@@ -147,41 +147,27 @@ public class Tree {
     }
 
     public String addDirectory(String directoryPath) throws Exception {
-        try {
-            String[] files = listFiles(directoryPath).toArray(new String[0]);
+        File dir = new File(directoryPath);
+        if (!dir.isDirectory()) {
+            throw new Exception("Not a directory");
+        }
+        File[] files = dir.listFiles();
 
-            String[] folders = listFolders(directoryPath).toArray(new String[0]);
+        Tree tree = new Tree();
 
-            for (String file : files) {
-                addTreeEntry("blob", Blob.toSha1(Index.readFile(file)), file);
-            }
-
-            for (String file : folders) {
+        for (File file : files) {
+            if (file.isDirectory()) {
                 Tree childTree = new Tree();
-                childTree.addDirectory(file);
-                childTree.writeDataFile();
-                addTreeEntry("tree", childTree.getSha1(), file);
+                tree.addTreeEntry("tree", childTree.addDirectory(file.getPath()), file.getName());
+            } else {
+                Blob blob = new Blob(file.getPath());
+                tree.addTreeEntry("blob", blob.getSha1(), file.getName());
             }
-        } catch (IOException exception) {
-            throw new Exception("File not readable");
         }
 
-        writeDataFile();
-        return getSha1();
-    }
+        tree.writeDataFile();
 
-    public Set<String> listFiles(String dir) {
-        return Stream.of(new File(dir).listFiles())
-                .filter(file -> !file.isDirectory())
-                .map(File::getPath)
-                .collect(Collectors.toSet());
-    }
-
-    public Set<String> listFolders(String dir) {
-        return Stream.of(new File(dir).listFiles())
-                .filter(file -> file.isDirectory())
-                .map(File::getPath)
-                .collect(Collectors.toSet());
+        return tree.getSha1();
     }
 
 }
