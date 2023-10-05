@@ -1,3 +1,5 @@
+package tests;
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -82,7 +84,7 @@ public class TreeTest {
     }
 
     @Test
-    void testAddDirectory1() throws Exception {
+    void testAddDirectory() throws Exception {
         File fold = new File("test1");
         fold.mkdirs();
         Tree tree = new Tree();
