@@ -59,12 +59,26 @@ public class Index {
 
         if (!readFile("index").contains(blob.getSha1())) {
             if (readFile("index").isEmpty())
-                pw.print(file.getName() + " : " + blob.getSha1());
+                pw.print("blob : " + blob.getSha1() + file.getName());
             else
-                pw.print("\n" + file.getName() + " : " + blob.getSha1());
+                pw.print("\nblob : " + blob.getSha1() + " : " + file.getName());
         }
 
         pw.close();
+        fw.close();
+    }
+
+    public static void addDirectory(String folderPath) throws Exception {
+        init();
+
+        File file = new File(folderPath);
+
+        Tree tree = new Tree();
+        tree.addDirectory(folderPath);
+
+        FileWriter fw = new FileWriter("index", true);
+        fw.write("\ntree : " + tree.getSha1() + " : " + file.getName());
+
         fw.close();
     }
 
