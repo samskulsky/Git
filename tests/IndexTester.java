@@ -74,8 +74,6 @@ public class IndexTester {
             fail("SHA-1 algorithm not available");
         }
 
-        String objectFilePath = "objects/" + sha1;
-
         String indexContents = readFileContent("index");
         assertFalse(indexContents.contains(testFinalPath + " : " + sha1), "Index entry should not exist");
     }
@@ -108,10 +106,4 @@ public class IndexTester {
         }
         return hashtext;
     }
-
-    private boolean fileIsNotEmpty(String filePath) {
-        java.io.File file = new java.io.File(filePath);
-        return file.exists() && file.length() > 0;
-    }
-
 }

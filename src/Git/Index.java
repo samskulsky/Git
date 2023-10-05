@@ -77,6 +77,7 @@ public class Index {
         tree.addDirectory(folderPath);
 
         FileWriter fw = new FileWriter("index", true);
+
         fw.write("\ntree : " + tree.getSha1() + " : " + file.getName());
 
         fw.close();

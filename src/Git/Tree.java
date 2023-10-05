@@ -113,7 +113,8 @@ public class Tree {
             data.append(entry);
             data.append("\n");
         }
-        String sha1 = Blob.toSha1(data.toString().trim());
+
+        String sha1 = Blob.toSha1(data.toString());
         return sha1.trim();
     }
 
