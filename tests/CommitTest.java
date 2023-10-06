@@ -10,11 +10,14 @@ import src.Git.Index;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.util.Comparator;
+import java.util.Scanner;
 import java.util.stream.Stream;
 
 import static org.junit.Assert.assertEquals;
@@ -93,6 +96,28 @@ public class CommitTest {
 
     @Test
     public void testOneCommit() throws Exception {
+        File testOneCommitFolder = new File("testOneCommit");
+        testOneCommitFolder.mkdir();
+        FileWriter fw1 = new FileWriter("testOneCommit/file1");
+        fw1.write("asdasdasdasd");
+        FileWriter fw2 = new FileWriter("testOneCommit/file2");
+        fw1.write("asdnasd asdn asjd");
+        fw1.close();
+        fw2.close();
+
         Index.addDirectory("testOneCommit");
+        Commit commit = new Commit("", "samskulsky", "testing one commit");
+        commit.writeToFile(commit.generateSha1());
+
+        FileReader fr = new FileReader("objects/" + commit.generateSha1());
+        Scanner scan = new Scanner(fr);
+        String treeSha = scan.nextLine();
+        String prev = scan.nextLine();
+        String next = scan.nextLine();
+        scan.close();
+
+        assertNotNull("Tree sha is correct", treeSha);
+        assertEquals("Prev sha is correct", prev, "");
+        assertEquals("Next sha is correct", next, "");
     }
 }
