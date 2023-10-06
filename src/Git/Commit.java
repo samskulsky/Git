@@ -28,7 +28,7 @@ public class Commit {
 
         while (scan.hasNextLine()) {
             String entry = scan.nextLine();
-            tree.addTreeEntry(entry.split(" : ")[0], entry.split(" : ")[1], entry.split(" : ")[2]);
+            tree.add(entry);
         }
 
         scan.close();
@@ -36,32 +36,41 @@ public class Commit {
 
         new FileWriter("index", false).close();
 
-        tree.add("tree : " + getPreviousTreeSha1());
+        if (!parentSha1.isEmpty()) {
+            try {
+                tree.add("tree : " + getPreviousTreeSha1());
+
+                String oldContents = Index.readFile(getCommitTreeSha1(parentSha1));
+                Scanner s = new Scanner(oldContents);
+
+                StringBuilder newContents = new StringBuilder();
+
+                FileWriter fw = new FileWriter(parentSha1, false);
+
+                int line = 0;
+                while (s.hasNextLine()) {
+                    String cur = s.nextLine();
+                    if (line == 3) {
+                        newContents.append(generateSha1() + "\n");
+                    } else if (s.hasNextLine()) {
+                        newContents.append(cur + "\n");
+                    } else {
+                        newContents.append(cur);
+                    }
+                    line++;
+                }
+                s.close();
+
+                fw.write(newContents.toString());
+
+                fw.close();
+            } catch (Exception e) {
+                // could not find last one
+            }
+        }
 
         this.treeSha1 = tree.getSha1();
-
-        String oldContents = Index.readFile(getCommitTreeSha1(parentSha1));
-        Scanner s = new Scanner(oldContents);
-
-        StringBuilder newContents = new StringBuilder();
-
-        FileWriter fw = new FileWriter(parentSha1, false);
-
-        int line = 0;
-        while (s.hasNextLine()) {
-            String cur = s.nextLine();
-            if (line == 3) {
-                newContents.append(generateSha1() + "\n");
-            } else {
-                newContents.append(cur + "\n");
-            }
-            line++;
-        }
-        s.close();
-
-        fw.write(newContents.toString());
-
-        fw.close();
+        tree.writeDataFile();
     }
 
     public String getPreviousTreeSha1() throws IOException {
@@ -106,7 +115,7 @@ public class Commit {
         commitData.append("\n");
         commitData.append(author + "\n");
         commitData.append(getDate() + "\n");
-        commitData.append(summary + "\n");
+        commitData.append(summary);
 
         String commitDataString = commitData.toString();
 
@@ -131,7 +140,7 @@ public class Commit {
         commitData.append("\n");
         commitData.append(author + "\n");
         commitData.append(getDate() + "\n");
-        commitData.append(summary + "\n");
+        commitData.append(summary);
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             writer.write(commitData.toString());
