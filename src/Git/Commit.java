@@ -15,7 +15,7 @@ public class Commit {
     private Date date;
     private String summary;
 
-    public Commit(String parentSha1, String author, String summary) throws IOException {
+    public Commit(String parentSha1, String author, String summary) throws IOException, NoSuchAlgorithmException {
         Tree tree = new Tree();
 
         this.parentSha1 = parentSha1;
@@ -40,6 +40,28 @@ public class Commit {
 
         this.treeSha1 = tree.getSha1();
 
+        String oldContents = Index.readFile(getCommitTreeSha1(parentSha1));
+        Scanner s = new Scanner(oldContents);
+
+        StringBuilder newContents = new StringBuilder();
+
+        FileWriter fw = new FileWriter(parentSha1, false);
+
+        int line = 0;
+        while (s.hasNextLine()) {
+            String cur = s.nextLine();
+            if (line == 3) {
+                newContents.append(generateSha1() + "\n");
+            } else {
+                newContents.append(cur + "\n");
+            }
+            line++;
+        }
+        s.close();
+
+        fw.write(newContents.toString());
+
+        fw.close();
     }
 
     public String getPreviousTreeSha1() throws IOException {
