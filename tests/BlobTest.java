@@ -4,15 +4,21 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Comparator;
+import java.util.stream.Stream;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import src.Git.Blob;
+import src.Git.Index;
 
 public class BlobTest {
     private static final String testFinalPath = "testfile2.txt";
@@ -20,7 +26,21 @@ public class BlobTest {
 
     // create festfile2.txt and testFileContent in a BeforeAll method
     @BeforeAll
-    static public void createFile() throws IOException {
+    public static void setUp() throws IOException {
+        File objects = new File("/objects");
+        if (objects.exists()) {
+            try (Stream<Path> pathStream = Files.walk(objects.toPath())) {
+                pathStream.sorted(Comparator.reverseOrder())
+                        .map(Path::toFile)
+                        .forEach(File::delete);
+            }
+        }
+
+        File index = new File("index");
+        index.delete();
+
+        Index.init();
+
         FileWriter fw = new FileWriter(testFinalPath);
         try {
             fw.write(testFileContent);
@@ -28,7 +48,21 @@ public class BlobTest {
             e.printStackTrace();
         }
         fw.close();
+    }
 
+    @AfterAll
+    public static void takeDown() throws IOException {
+        File objects = new File("/objects");
+        if (objects.exists()) {
+            try (Stream<Path> pathStream = Files.walk(objects.toPath())) {
+                pathStream.sorted(Comparator.reverseOrder())
+                        .map(Path::toFile)
+                        .forEach(File::delete);
+            }
+        }
+
+        File index = new File("index");
+        index.delete();
     }
 
     @Test

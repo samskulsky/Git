@@ -1,26 +1,45 @@
 package tests;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import src.Git.Index;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.file.Files;
+import java.nio.file.Path;
+
 import static org.junit.jupiter.api.Assertions.*;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Comparator;
+import java.util.stream.Stream;
 
 public class IndexTester {
 
     private static final String testFinalPath = "testfile.txt";
     private static final String testFileContent = "Testing the index and blob classes";
 
-    @BeforeEach
-    public void setUp() {
+    @BeforeAll
+    public static void setUp() throws IOException {
+        File objects = new File("/objects");
+        if (objects.exists()) {
+            try (Stream<Path> pathStream = Files.walk(objects.toPath())) {
+                pathStream.sorted(Comparator.reverseOrder())
+                        .map(Path::toFile)
+                        .forEach(File::delete);
+            }
+        }
+
+        File index = new File("index");
+        index.delete();
+
         try {
             FileWriter fileWriter = new FileWriter(testFinalPath);
             fileWriter.write(testFileContent);
@@ -28,6 +47,21 @@ public class IndexTester {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @AfterAll
+    public static void takeDown() throws IOException {
+        File objects = new File("/objects");
+        if (objects.exists()) {
+            try (Stream<Path> pathStream = Files.walk(objects.toPath())) {
+                pathStream.sorted(Comparator.reverseOrder())
+                        .map(Path::toFile)
+                        .forEach(File::delete);
+            }
+        }
+
+        File index = new File("index");
+        index.delete();
     }
 
     private String readFileContent(String filePath) throws IOException {

@@ -8,14 +8,53 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Comparator;
+import java.util.stream.Stream;
+
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import src.Git.Blob;
+import src.Git.Index;
 import src.Git.Tree;
 
 public class TreeTest {
     private String path = "testfile.txt";
+
+    @BeforeAll
+    public static void setUp() throws IOException {
+        File objects = new File("/objects");
+        if (objects.exists()) {
+            try (Stream<Path> pathStream = Files.walk(objects.toPath())) {
+                pathStream.sorted(Comparator.reverseOrder())
+                        .map(Path::toFile)
+                        .forEach(File::delete);
+            }
+        }
+
+        File index = new File("index");
+        index.delete();
+
+        Index.init();
+    }
+
+    @AfterAll
+    public static void takeDown() throws IOException {
+        File objects = new File("/objects");
+        if (objects.exists()) {
+            try (Stream<Path> pathStream = Files.walk(objects.toPath())) {
+                pathStream.sorted(Comparator.reverseOrder())
+                        .map(Path::toFile)
+                        .forEach(File::delete);
+            }
+        }
+
+        File index = new File("index");
+        index.delete();
+    }
 
     @Test
     void testAddTreeEntry() {

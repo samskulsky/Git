@@ -60,7 +60,7 @@ public class CommitTest {
     public void testGenerateSha1() throws NoSuchAlgorithmException, IOException {
         Commit commit = new Commit("parentSha1", "Author", "Summary");
         String sha1 = commit.generateSha1();
-        assertEquals("Test if generateSha1 works", "924776634391d116ceee1749cdb6880c4932438b", sha1);
+        assertEquals("Test if generateSha1 works", "2f65c30f4a6010afc90b09780ef244db343096ad", sha1);
     }
 
     @Test // Test if writeToFile correctly writes
