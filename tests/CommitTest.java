@@ -121,9 +121,49 @@ public class CommitTest {
         String prev = scan.nextLine();
         String next = scan.nextLine();
         scan.close();
+        fr.close();
 
-        assertNotNull("Tree sha is correct", treeSha);
-        assertEquals("Prev sha is correct", prev, "");
+        assertNotNull("Tree sha is not null", treeSha);
+        assertEquals("Previous sha is correct", prev, "");
         assertEquals("Next sha is correct", next, "");
+    }
+
+    @Test
+    public void testTwoCommits() throws Exception {
+        addFolder("testTwoCommitsA");
+        addFolder("testTwoCommitsB");
+
+        addFile("testTwoCommitsA/a", "aa");
+        addFile("testTwoCommitsA/b", "bb");
+        addFile("testTwoCommitsB/c", "cc");
+        addFile("testTwoCommitsB/d", "dd");
+
+        Index.addDirectory("testTwoCommitsA");
+        Commit commit = new Commit("", "samskulsky", "testing two commits (a)");
+        commit.writeToFile(commit.generateSha1());
+
+        Index.addDirectory("testTwoCommitsB");
+        Commit commit2 = new Commit(commit.generateSha1(), "samskulsky", "testing two commits (b)");
+        commit2.writeToFile(commit2.generateSha1());
+
+        FileReader fr1 = new FileReader("objects/" + commit.generateSha1());
+        Scanner scan1 = new Scanner(fr1);
+        String treeSha1 = scan1.nextLine();
+        String prev1 = scan1.nextLine();
+        String next1 = scan1.nextLine();
+        scan1.close();
+        fr1.close();
+
+        FileReader fr2 = new FileReader("objects/" + commit2.generateSha1());
+        Scanner scan2 = new Scanner(fr2);
+        String treeSha2 = scan2.nextLine();
+        String prev2 = scan2.nextLine();
+        String next2 = scan2.nextLine();
+        scan2.close();
+        fr2.close();
+
+        assertEquals("New commit's previous sha is old", prev2, commit.generateSha1());
+        assertEquals("Old commit's next sha is new", next1, commit2.generateSha1());
+
     }
 }

@@ -83,15 +83,7 @@ public class Tree {
     }
 
     public String generateFileName() {
-        StringBuilder data = new StringBuilder();
-        for (String entry : treeList) {
-            data.append(entry);
-            data.append("\n");
-        }
-
-        String sha1 = Blob.toSha1(data.toString());
-
-        return "objects/" + sha1;
+        return "objects/" + getSha1();
     }
 
     public ArrayList<String> getTreeList() {
@@ -99,13 +91,16 @@ public class Tree {
     }
 
     public String getSha1() {
-        StringBuilder data = new StringBuilder();
-        for (String entry : treeList) {
-            data.append(entry);
-            data.append("\n");
+        StringBuilder contents = new StringBuilder();
+        for (int i = 0; i < treeList.size(); i++) {
+            if (!treeList.get(i).isEmpty()) {
+                contents.append(treeList.get(i));
+                if (i < treeList.size() - 1) {
+                    contents.append("\n");
+                }
+            }
         }
-
-        String sha1 = Blob.toSha1(data.toString());
+        String sha1 = Blob.toSha1(contents.toString());
         return sha1.trim();
     }
 
