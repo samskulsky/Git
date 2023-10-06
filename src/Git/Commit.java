@@ -15,13 +15,35 @@ public class Commit {
     private Date date;
     private String summary;
 
-    public Commit(String parentSha1, String author, String summary) {
+    public Commit(String parentSha1, String author, String summary) throws IOException {
         Tree tree = new Tree();
-        this.treeSha1 = tree.getSha1();
+
         this.parentSha1 = parentSha1;
         this.author = author;
         this.date = new Date(); // Current date and time
         this.summary = summary;
+
+        FileReader fr = new FileReader("index");
+        Scanner scan = new Scanner(fr);
+
+        while (scan.hasNextLine()) {
+            String entry = scan.nextLine();
+            tree.addTreeEntry(entry.split(" : ")[0], entry.split(" : ")[1], entry.split(" : ")[2]);
+        }
+
+        scan.close();
+        fr.close();
+
+        new FileWriter("index", false).close();
+
+        tree.add("tree : " + getPreviousTreeSha1());
+
+        this.treeSha1 = tree.getSha1();
+
+    }
+
+    public String getPreviousTreeSha1() throws IOException {
+        return Blob.toSha1(Index.readFile(parentSha1));
     }
 
     public static String getCommitTreeSha1(String commitSha1) throws IOException {

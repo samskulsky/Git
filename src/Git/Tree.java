@@ -13,6 +13,12 @@ public class Tree {
         treeList = new ArrayList<String>();
     }
 
+    public void add(String entry) {
+        if (!treeList.contains(entry)) {
+            treeList.add(entry);
+        }
+    }
+
     public void addTreeEntry(String fileType, String sha1, String fileName) {
         if (fileType.equals("tree")) {
             if (!treeList.contains(fileType + " : " + sha1)) {
