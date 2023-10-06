@@ -41,19 +41,19 @@ public class Commit {
                 tree.add("tree : " + getPreviousTreeSha1());
                 this.treeSha1 = tree.getSha1();
 
-                String oldContents = Index.readFile("objects/" + getCommitTreeSha1(parentSha1));
+                String oldContents = Index.readFile("objects/" + getPreviousTreeSha1());
                 Scanner s = new Scanner(oldContents);
 
-                System.out.println(getCommitTreeSha1(parentSha1));
+                System.out.println(getPreviousTreeSha1());
 
                 StringBuilder newContents = new StringBuilder();
 
-                FileWriter fw = new FileWriter("objects/" + getCommitTreeSha1(parentSha1), false);
+                FileWriter fw = new FileWriter("objects/" + getPreviousTreeSha1(), false);
 
                 int line = 0;
                 while (s.hasNextLine()) {
                     String cur = s.nextLine();
-                    if (line == 3) {
+                    if (line == 2) {
                         newContents.append(generateSha1() + "\n");
                     } else if (s.hasNextLine()) {
                         newContents.append(cur + "\n");
