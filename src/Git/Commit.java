@@ -39,13 +39,16 @@ public class Commit {
         if (!parentSha1.isEmpty()) {
             try {
                 tree.add("tree : " + getPreviousTreeSha1());
+                this.treeSha1 = tree.getSha1();
 
-                String oldContents = Index.readFile(getCommitTreeSha1(parentSha1));
+                String oldContents = Index.readFile("objects/" + getCommitTreeSha1(parentSha1));
                 Scanner s = new Scanner(oldContents);
+
+                System.out.println(getCommitTreeSha1(parentSha1));
 
                 StringBuilder newContents = new StringBuilder();
 
-                FileWriter fw = new FileWriter(parentSha1, false);
+                FileWriter fw = new FileWriter("objects/" + getCommitTreeSha1(parentSha1), false);
 
                 int line = 0;
                 while (s.hasNextLine()) {
@@ -65,7 +68,7 @@ public class Commit {
 
                 fw.close();
             } catch (Exception e) {
-                // could not find last one
+                e.printStackTrace();
             }
         }
 
@@ -74,7 +77,7 @@ public class Commit {
     }
 
     public String getPreviousTreeSha1() throws IOException {
-        return Blob.toSha1(Index.readFile(parentSha1));
+        return Blob.toSha1(Index.readFile("objects/" + parentSha1));
     }
 
     public static String getCommitTreeSha1(String commitSha1) throws IOException {

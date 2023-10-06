@@ -94,16 +94,22 @@ public class CommitTest {
 
     }
 
+    public void addFolder(String name) {
+        File testOneCommitFolder = new File(name);
+        testOneCommitFolder.mkdir();
+    }
+
+    public void addFile(String path, String content) throws IOException {
+        FileWriter fw = new FileWriter(path);
+        fw.write(content);
+        fw.close();
+    }
+
     @Test
     public void testOneCommit() throws Exception {
-        File testOneCommitFolder = new File("testOneCommit");
-        testOneCommitFolder.mkdir();
-        FileWriter fw1 = new FileWriter("testOneCommit/file1");
-        fw1.write("asdasdasdasd");
-        FileWriter fw2 = new FileWriter("testOneCommit/file2");
-        fw1.write("asdnasd asdn asjd");
-        fw1.close();
-        fw2.close();
+        addFolder("testOneCommit");
+        addFile("testOneCommit/file1", "asdasdasdasd");
+        addFile("testOneCommit/file2", "asdnasd asdn asjd");
 
         Index.addDirectory("testOneCommit");
         Commit commit = new Commit("", "samskulsky", "testing one commit");
