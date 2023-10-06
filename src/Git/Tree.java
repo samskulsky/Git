@@ -70,9 +70,11 @@ public class Tree {
     public void writeDataFile() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(generateFileName()))) {
             for (int i = 0; i < treeList.size(); i++) {
-                bw.write(treeList.get(i));
-                if (i < treeList.size() - 1) {
-                    bw.newLine();
+                if (!treeList.get(i).isEmpty()) {
+                    bw.write(treeList.get(i));
+                    if (i < treeList.size() - 1) {
+                        bw.newLine();
+                    }
                 }
             }
         } catch (IOException e) {
