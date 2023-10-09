@@ -14,7 +14,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.util.Comparator;
 import java.util.Scanner;
@@ -165,5 +164,10 @@ public class CommitTest {
         assertEquals("New commit's previous sha is old", prev2, commit.generateSha1());
         assertEquals("Old commit's next sha is new", next1, commit2.generateSha1());
 
+        assertEquals("Old commit's sha is correct", "3bf1f817ebc2c8ae14b5eb078581f7c055d22290", treeSha1);
+        assertEquals("New commit's sha is correct", "ec5eddbc91479446d73e094d9d1e98dddb9444a3", treeSha2);
+
+        assertEquals("Old commit's previous sha is empty", prev1, "");
+        assertEquals("New commit's next sha is empty", next2, "");
     }
 }
