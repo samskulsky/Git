@@ -129,13 +129,13 @@ public class CommitTest {
 
     @Test
     public void testTwoCommits() throws Exception {
-        addFolder("testTwoCommitsA");
-        addFolder("testTwoCommitsB");
+        addFolder("testCommitsA");
+        addFolder("testCommitsB");
 
-        addFile("testTwoCommitsA/a", "aa");
-        addFile("testTwoCommitsA/b", "bb");
-        addFile("testTwoCommitsB/c", "cc");
-        addFile("testTwoCommitsB/d", "dd");
+        addFile("testCommitsA/a", "aa");
+        addFile("testCommitsA/b", "bb");
+        addFile("testCommitsB/c", "cc");
+        addFile("testCommitsB/d", "dd");
 
         Index.addDirectory("testTwoCommitsA");
         Commit commit = new Commit("", "samskulsky", "testing two commits (a)");
@@ -169,5 +169,86 @@ public class CommitTest {
 
         assertEquals("Old commit's previous sha is empty", prev1, "");
         assertEquals("New commit's next sha is empty", next2, "");
+    }
+
+    @Test
+    public void testFourCommits() throws Exception {
+        addFolder("testCommitsA");
+        addFolder("testCommitsB");
+        addFolder("testCommitsC");
+        addFolder("testCommitsC/sub1");
+        addFolder("testCommitsD");
+        addFolder("testCommitsD/sub2");
+
+        addFile("testCommitsA/a", "aa");
+        addFile("testCommitsA/b", "bb");
+        addFile("testCommitsB/c", "cc");
+        addFile("testCommitsB/d", "dd");
+        addFile("testCommitsC/sub1/e", "ee");
+        addFile("testCommitsC/f", "ff");
+        addFile("testCommitsD/sub2/g", "gg");
+        addFile("testCommitsD/h", "hh");
+
+        Index.addDirectory("testCommitsA");
+        Commit commit = new Commit("", "samskulsky", "testing four commits (a)");
+        commit.writeToFile(commit.generateSha1());
+
+        Index.addDirectory("testCommitsB");
+        Commit commit2 = new Commit(commit.generateSha1(), "samskulsky", "testing four commits (b)");
+        commit2.writeToFile(commit2.generateSha1());
+
+        Index.addDirectory("testCommitsC");
+        Commit commit3 = new Commit(commit2.generateSha1(), "samskulsky", "testing four commits (c)");
+        commit3.writeToFile(commit3.generateSha1());
+
+        Index.addDirectory("testCommitsD");
+        Commit commit4 = new Commit(commit3.generateSha1(), "samskulsky", "testing four commits (d)");
+        commit4.writeToFile(commit4.generateSha1());
+
+        FileReader fr1 = new FileReader("objects/" + commit.generateSha1());
+        Scanner scan1 = new Scanner(fr1);
+        String treeSha1 = scan1.nextLine();
+        String prev1 = scan1.nextLine();
+        String next1 = scan1.nextLine();
+        scan1.close();
+        fr1.close();
+
+        FileReader fr2 = new FileReader("objects/" + commit2.generateSha1());
+        Scanner scan2 = new Scanner(fr2);
+        String treeSha2 = scan2.nextLine();
+        String prev2 = scan2.nextLine();
+        String next2 = scan2.nextLine();
+        scan2.close();
+        fr2.close();
+
+        FileReader fr3 = new FileReader("objects/" + commit3.generateSha1());
+        Scanner scan3 = new Scanner(fr3);
+        String treeSha3 = scan3.nextLine();
+        String prev3 = scan3.nextLine();
+        String next3 = scan3.nextLine();
+        scan3.close();
+        fr3.close();
+
+        FileReader fr4 = new FileReader("objects/" + commit4.generateSha1());
+        Scanner scan4 = new Scanner(fr4);
+        String treeSha4 = scan4.nextLine();
+        String prev4 = scan4.nextLine();
+        String next4 = scan4.nextLine();
+        scan4.close();
+        fr4.close();
+
+        assertEquals("First commit has no previous", prev1, "");
+        assertEquals("First -> second", next1, commit2.generateSha1());
+        assertEquals("Second -> first", prev2, commit.generateSha1());
+        assertEquals("Second -> third", next2, commit3.generateSha1());
+        assertEquals("Third -> second", prev3, commit2.generateSha1());
+        assertEquals("Third -> fourth", next3, commit4.generateSha1());
+        assertEquals("Fourth -> third", prev4, commit3.generateSha1());
+        assertEquals("Fourth commit has no next", next4, "");
+
+        assertEquals("First commit's sha is correct", "3a83b2d1d4714234664dd3109ececbdbb93636e8", treeSha1);
+        assertEquals("Second commit's sha is correct", "dd81628477cf3e113e82a8f2d8f5992d6291a05c", treeSha2);
+        assertEquals("Third commit's sha is correct", "2e29a24b73ccf2ea8430163cb0372dbde471c61b", treeSha3);
+        assertEquals("Fourth commit's sha is correct", "bd1f0679554747901265eb4cc02e6cf77247d94b", treeSha4);
     }
 }
