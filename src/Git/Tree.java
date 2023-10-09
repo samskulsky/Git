@@ -2,8 +2,10 @@ package src.Git;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 
 public class Tree {
@@ -126,6 +128,45 @@ public class Tree {
         tree.writeDataFile();
 
         return tree.getSha1();
+    }
+
+    public static String findDeletedFile(String deletedFileName, String treeSha) throws Exception {
+        FileReader treeReader = new FileReader("objects/" + treeSha);
+        try (Scanner scan = new Scanner(treeReader)) {
+            while (scan.hasNextLine()) {
+                String line = scan.nextLine();
+
+                System.out.println(treeSha);
+                System.out.println(line);
+
+                if (line.split(" : ")[0].equals("tree")) {
+                    String deletedSha = findDeletedFile(deletedFileName, line.split(" : ")[1]);
+                    if (!deletedSha.isEmpty()) {
+                        return deletedSha;
+                    }
+                } else if (line.split(" : ")[0].equals("blob") && line.split(" : ")[2].equals(deletedFileName)) {
+                    return treeSha;
+                }
+            }
+        }
+
+        return "";
+    }
+
+    public static String deleteFile(String deletedFileName) throws Exception {
+        FileReader frHead = new FileReader("HEAD");
+        Scanner frScan = new Scanner(frHead);
+        String latestCommit = frScan.nextLine();
+        frScan.close();
+        frHead.close();
+
+        FileReader latestTree = new FileReader("objects/" + latestCommit);
+        Scanner latestScan = new Scanner(latestTree);
+        String latestTreeSha = latestScan.nextLine();
+        latestScan.close();
+        latestTree.close();
+
+        return findDeletedFile(deletedFileName, latestTreeSha);
     }
 
 }

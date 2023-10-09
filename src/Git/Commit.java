@@ -74,6 +74,10 @@ public class Commit {
 
         this.treeSha1 = tree.getSha1();
         tree.writeDataFile();
+
+        FileWriter fwHead = new FileWriter("HEAD", false);
+        fwHead.write(generateSha1());
+        fwHead.close();
     }
 
     public String getPreviousTreeSha1() throws IOException {
