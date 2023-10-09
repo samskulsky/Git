@@ -90,4 +90,16 @@ public class Index {
         out.close();
         temp.renameTo(file);
     }
+
+    public static void deleteFile(String fileName) throws IOException {
+        FileWriter fw = new FileWriter("index");
+        fw.write("*deleted* " + fileName);
+        fw.close();
+    }
+
+    public static void editedFile(String fileName) throws IOException {
+        FileWriter fw = new FileWriter("index");
+        fw.write("*edited* " + fileName);
+        fw.close();
+    }
 }
