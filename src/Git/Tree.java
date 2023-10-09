@@ -140,15 +140,16 @@ public class Tree {
                 System.out.println(line);
 
                 if (line.split(" : ")[0].equals("tree")) {
-                    String deletedSha = findDeletedFile(deletedFileName, line.split(" : ")[1]);
-                    if (!deletedSha.isEmpty()) {
-                        return deletedSha;
-                    }
-                } else if (line.split(" : ")[0].equals("blob") && line.split(" : ")[2].equals(deletedFileName)) {
+                    String a = findDeletedFile(deletedFileName, line.split(" : ")[1]);
+                    if (!a.isEmpty())
+                        return a;
+                } else if (line.equals(deletedFileName)) {
                     return treeSha;
                 }
             }
         }
+
+        treeReader.close();
 
         return "";
     }

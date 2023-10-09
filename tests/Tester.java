@@ -22,6 +22,9 @@ public class Tester {
     }
 
     public static void main(String[] args) throws Exception {
-        System.out.println(Tree.deleteFile("a"));
+        Index.addBlob("index");
+        Commit commit = new Commit("", "s", "d");
+        commit.writeToFile(commit.generateSha1());
+        System.out.println(Tree.deleteFile("index"));
     }
 }

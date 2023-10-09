@@ -50,7 +50,7 @@ public class Index {
 
         if (!readFile("index").contains(blob.getSha1())) {
             if (readFile("index").isEmpty())
-                pw.print("blob : " + blob.getSha1() + file.getName());
+                pw.print("blob : " + blob.getSha1() + " : " + file.getName());
             else
                 pw.print("\nblob : " + blob.getSha1() + " : " + file.getName());
         }
