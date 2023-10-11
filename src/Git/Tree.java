@@ -10,6 +10,7 @@ import java.io.FileWriter;
 
 public class Tree {
     private static ArrayList<String> treeList;
+    private static String foundTree;
 
     public Tree() {
         treeList = new ArrayList<String>();
@@ -132,23 +133,19 @@ public class Tree {
         try (Scanner scan = new Scanner(treeReader)) {
             while (scan.hasNextLine()) {
                 String line = scan.nextLine();
-
-                System.out.println(treeSha);
-                System.out.println(line);
-
                 if (line.split(" : ")[0].equals("tree")) {
                     String a = findDeletedFile(deletedFileName, line.split(" : ")[1]);
                     if (!a.isEmpty())
                         return a;
-                } else if (line.equals(deletedFileName)) {
-                    return treeSha;
+                } else if (line.contains(deletedFileName)) {
+                    foundTree = treeSha;
                 }
             }
         }
 
         treeReader.close();
 
-        return "";
+        return foundTree;
     }
 
     public static String deleteFile(String deletedFileName) throws Exception {
