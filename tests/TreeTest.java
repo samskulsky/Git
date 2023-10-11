@@ -92,7 +92,7 @@ public class TreeTest {
     }
 
     @Test
-    void testWriteDataFile() {
+    void testWriteDataFile() throws IOException {
         Tree tree = new Tree();
         try (BufferedWriter bw = new BufferedWriter(new FileWriter("testfile.txt"))) {
             Blob blob = new Blob("testfile.txt");

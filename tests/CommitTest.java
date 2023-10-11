@@ -137,11 +137,11 @@ public class CommitTest {
         addFile("testCommitsB/c", "cc");
         addFile("testCommitsB/d", "dd");
 
-        Index.addDirectory("testTwoCommitsA");
+        Index.addDirectory("testCommitsA");
         Commit commit = new Commit("", "samskulsky", "testing two commits (a)");
         commit.writeToFile(commit.generateSha1());
 
-        Index.addDirectory("testTwoCommitsB");
+        Index.addDirectory("testCommitsB");
         Commit commit2 = new Commit(commit.generateSha1(), "samskulsky", "testing two commits (b)");
         commit2.writeToFile(commit2.generateSha1());
 
@@ -164,8 +164,8 @@ public class CommitTest {
         assertEquals("New commit's previous sha is old", prev2, commit.generateSha1());
         assertEquals("Old commit's next sha is new", next1, commit2.generateSha1());
 
-        assertEquals("Old commit's sha is correct", "3bf1f817ebc2c8ae14b5eb078581f7c055d22290", treeSha1);
-        assertEquals("New commit's sha is correct", "ec5eddbc91479446d73e094d9d1e98dddb9444a3", treeSha2);
+        assertEquals("Old commit's sha is correct", "cbd80f689f3026434e36cacd488f530d35923165", treeSha1);
+        assertEquals("New commit's sha is correct", "fb781d99de3d1b5c92288d3ed1aa3ea0e6e3226e", treeSha2);
 
         assertEquals("Old commit's previous sha is empty", prev1, "");
         assertEquals("New commit's next sha is empty", next2, "");
@@ -246,9 +246,9 @@ public class CommitTest {
         assertEquals("Fourth -> third", prev4, commit3.generateSha1());
         assertEquals("Fourth commit has no next", next4, "");
 
-        assertEquals("First commit's sha is correct", "3a83b2d1d4714234664dd3109ececbdbb93636e8", treeSha1);
-        assertEquals("Second commit's sha is correct", "dd81628477cf3e113e82a8f2d8f5992d6291a05c", treeSha2);
-        assertEquals("Third commit's sha is correct", "2e29a24b73ccf2ea8430163cb0372dbde471c61b", treeSha3);
-        assertEquals("Fourth commit's sha is correct", "bd1f0679554747901265eb4cc02e6cf77247d94b", treeSha4);
+        assertEquals("First commit's sha is correct", "cbd80f689f3026434e36cacd488f530d35923165", treeSha1);
+        assertEquals("Second commit's sha is correct", "d9c60e0b47e86963b406ec4f28c0edfb6e457cad", treeSha2);
+        assertEquals("Third commit's sha is correct", "ae7529744fcf4ae4885b7b01c8e5df8154876246", treeSha3);
+        assertEquals("Fourth commit's sha is correct", "474e45cb3a35944719bea16eb69235c39bb9affd", treeSha4);
     }
 }

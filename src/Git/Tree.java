@@ -55,7 +55,6 @@ public class Tree {
     public void removeBlobEntry(String fileName) {
         for (int i = 0; i < treeList.size(); i++) {
             if (treeList.get(i).contains(fileName)) {
-
                 treeList.remove(i);
             }
         }
@@ -69,19 +68,18 @@ public class Tree {
         return sb.toString();
     }
 
-    public void writeDataFile() {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(generateFileName()))) {
-            for (int i = 0; i < treeList.size(); i++) {
-                if (!treeList.get(i).isEmpty()) {
-                    bw.write(treeList.get(i));
-                    if (i < treeList.size() - 1) {
-                        bw.newLine();
-                    }
-                }
+    public void writeDataFile() throws IOException {
+        StringBuilder contents = new StringBuilder();
+        for (int i = 0; i < treeList.size(); i++) {
+            contents.append(treeList.get(i));
+            if (i < treeList.size() - 1) {
+                contents.append("\n");
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+
+        FileWriter fw = new FileWriter(generateFileName(), false);
+        fw.write(contents.toString());
+        fw.close();
     }
 
     public String generateFileName() {
@@ -95,15 +93,13 @@ public class Tree {
     public String getSha1() {
         StringBuilder contents = new StringBuilder();
         for (int i = 0; i < treeList.size(); i++) {
-            if (!treeList.get(i).isEmpty()) {
-                contents.append(treeList.get(i));
-                if (i < treeList.size() - 1) {
-                    contents.append("\n");
-                }
+            contents.append(treeList.get(i));
+            if (i < treeList.size() - 1) {
+                contents.append("\n");
             }
         }
         String sha1 = Blob.toSha1(contents.toString());
-        return sha1.trim();
+        return sha1;
     }
 
     public String addDirectory(String directoryPath) throws Exception {
@@ -113,21 +109,22 @@ public class Tree {
         }
         File[] files = dir.listFiles();
 
-        Tree tree = new Tree();
-
         for (File file : files) {
             if (file.isDirectory()) {
                 Tree childTree = new Tree();
-                tree.addTreeEntry("tree", childTree.addDirectory(file.getPath()), file.getName());
-            } else {
+                childTree.addDirectory(file.getPath());
+                add("tree : " + childTree.getSha1() + " : " + file.getName());
+            }
+
+            if (file.isFile()) {
                 Blob blob = new Blob(file.getPath());
-                tree.addTreeEntry("blob", blob.getSha1(), file.getName());
+                add("blob : " + blob.getSha1() + " : " + file.getName());
             }
         }
 
-        tree.writeDataFile();
+        writeDataFile();
 
-        return tree.getSha1();
+        return getSha1();
     }
 
     public static String findDeletedFile(String deletedFileName, String treeSha) throws Exception {

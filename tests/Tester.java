@@ -22,9 +22,14 @@ public class Tester {
     }
 
     public static void main(String[] args) throws Exception {
-        Index.addBlob("index");
-        Commit commit = new Commit("", "s", "d");
+        Index.init();
+        Index.addDirectory("testCommitsA");
+        Commit commit = new Commit("", "samskulsky", "testing two commits (a)");
         commit.writeToFile(commit.generateSha1());
-        System.out.println(Tree.deleteFile("index"));
+
+        Index.addDirectory("testCommitsB");
+        Commit commit2 = new Commit(commit.generateSha1(), "samskulsky", "testing two commits (b)");
+        commit2.writeToFile(commit2.generateSha1());
+
     }
 }
