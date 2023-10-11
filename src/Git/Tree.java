@@ -12,7 +12,33 @@ public class Tree {
     private static ArrayList<String> treeList;
     private static String foundTree;
 
-    public Tree() {
+    public Tree() throws IOException {
+        Index.init();
+
+        FileWriter fw = new FileWriter("__temp__", false);
+        FileReader fr = new FileReader("index");
+        Scanner scan = new Scanner(fr);
+
+        while (scan.hasNextLine()) {
+            String l = scan.nextLine();
+
+            if (!l.contains("*deleted*")) {
+                fw.write(l);
+            }
+
+            if (scan.hasNextLine()) {
+                fw.write("\n");
+            }
+        }
+
+        fw.close();
+        fr.close();
+        scan.close();
+
+        File temp = new File("__temp__");
+        File index = new File("index");
+        temp.renameTo(index);
+
         treeList = new ArrayList<String>();
     }
 

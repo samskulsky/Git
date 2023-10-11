@@ -26,10 +26,10 @@ public class Tester {
         Index.addBlob("ScreenShotCommitA.png");
         Index.addBlob("ScreenShotCommitB.png");
 
-        Commit commit = new Commit("", "samskulsky", "testing two commits (a)");
-        commit.writeToFile(commit.generateSha1());
+        // Commit commit = new Commit("", "samskulsky", "testing two commits (a)");
+        // commit.writeToFile(commit.generateSha1());
 
-        System.out.println(Tree.deleteFile("ScreenShotCommitB.png"));
+        // System.out.println(Tree.deleteFile("ScreenShotCommitB.png"));
 
     }
 }
